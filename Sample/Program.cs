@@ -95,6 +95,11 @@ namespace Sample
                 }
             }
         }
+
+        private static void FindPairsInOneArray(int[] arr,int x)
+        {
+
+        }
         
     }
 }
