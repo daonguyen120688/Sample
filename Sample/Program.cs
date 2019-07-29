@@ -30,6 +30,10 @@ namespace Sample
 
             FindPairs(arrStr);
 
+            FindPairInOneArray(arr2, 4);
+
+            Console.WriteLine(HasSwappingPair(arr1, arr2));
+
             Console.ReadLine();
         }
 
@@ -74,32 +78,93 @@ namespace Sample
 
         private static void FindPairs(string[] arr)
         {
-            Dictionary<int, string> dic = new Dictionary<int, string>();
+            HashSet<int> dic = new HashSet<int>();
 
             for(int i=0;i<arr.Length;i++)
             {
-                if (dic.ContainsKey(i))
+                if (dic.Contains(i))
                     continue;
 
                 for (int j=i+1;j<arr.Length;j++)
                 {
-                    if (dic.ContainsKey(j))
+                    if (dic.Contains(j))
                         continue;
                     if(arr[i]!=arr[j])
                     {
                         Console.WriteLine(arr[i] + "-" + arr[j]);
-                        dic[i] = arr[i];
-                        dic[j]= arr[j];
+                        dic.Add(i);
+                        dic.Add(j);
                         break;
                     }
                 }
             }
         }
 
-        private static void FindPairsInOneArray(int[] arr,int x)
+        private static void FindPairInOneArray(int[] arr,int x)
         {
+            HashSet<int> hash = new HashSet<int>();
+            for(int i=0;i<arr.Length;i++)
+            {
+                int value1 = x - arr[i];
+                if (hash.Contains(value1))
+                {
+                    Console.WriteLine(value1 + " " + arr[i]);
+                    break;
+                }
+                hash.Add(arr[i]);
+            }
+        }
 
+        private static int GetSum(int[] arr)
+        {
+            int sum = 0;
+            for(int i=0;i<arr.Length;i++)
+            {
+                sum += arr[i];
+            }
+            return sum;
+        }
+
+        private static int GetAverage(int[] arr1,int[] arr2)
+        {
+            int sum1 = GetSum(arr1);
+            int sum2 = GetSum(arr2);
+
+            int average = sum1 - sum2;
+
+            if (average % 2 != 0)
+                return 0;
+            return average / 2;
         }
         
+        private static bool HasSwappingPair(int[] arr1,int[] arr2)
+        {
+            Array.Sort(arr1);
+            Array.Sort(arr2);
+
+            int average = GetAverage(arr1, arr2);
+
+            if (average == 0)
+                return false;
+
+            int i=0, j = 0;
+            while(i<arr1.Length && j<arr2.Length)
+            {
+                int diff = arr1[i] - arr2[j];
+
+                if (diff == average)
+                {
+                    Console.WriteLine(arr1[i] + " " + arr2[j]);
+                    return true;
+                }
+                    
+                if (diff < average)
+                    i++;
+                else
+                    j--;
+            }
+
+            return false;
+        }
     }
 }
